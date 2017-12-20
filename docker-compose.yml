@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+    php-apache:
+        build: php-apache
+        volumes:
+        - "./www/:/var/www/html"
+        - "./php-apache/php.ini:/usr/local/etc/php/php.ini"
+        links:
+        - mysql
+        ports:
+        - "80:80"
+        networks:
+            - main
+        privileged: true
+    mysql:
+        image: mysql:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "project"
+            MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+        privileged: true
+        volumes:
+            - "./mysql/data/:/var/lib/mysql"
+        ports:
+            - "3306:3306"
+        networks:
+            - main
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            PMA_ARBITRARY: 0
+            PMA_HOST: "mysql"
+            PMA_PORT: 3306
+            PMA_USER: "root"
+            PMA_PASSWORD: "root"
+        ports:
+            - "8080:80"
+        links:
+            - mysql
+        networks:
+            - main
+networks:
+    main:
+        driver: bridge
