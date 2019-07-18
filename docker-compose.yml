@@ -1,4 +1,4 @@
-version: '2'
+version: '3.1'
 
 services:
     php-apache:
@@ -15,6 +15,7 @@ services:
         privileged: true
     mysql:
         image: mysql:latest
+        command: --default-authentication-plugin=mysql_native_password
         environment:
             MYSQL_ROOT_PASSWORD: "root"
             MYSQL_DATABASE: "project"
